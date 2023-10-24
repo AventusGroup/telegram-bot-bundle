@@ -57,18 +57,22 @@ final class UpdateHandler
 
         if ($update instanceof Update) {
             $user = null;
+            $chat = null;
             foreach ($update as $updateItem) {
                 if (isset($updateItem->from)) {
                     $user = $updateItem->from;
+                    $chat = $updateItem->chat;
                     break;
                 }
             }
         } else {
             $user = $update->from ?? null;
+            $chat = $update->chat ?? null;
         }
 
         if ($controllerService instanceof TelegramCommand && $user !== null) {
             $controllerService->setUser($user);
+            $controllerService->setChat($chat);
         }
 
         return $controllerService->$method($update, ...$params);
